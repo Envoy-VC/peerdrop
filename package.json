@@ -8,13 +8,16 @@
 		"lerna": "^8.1.9",
 		"@changesets/cli": "^2.27.9"
 	},
+	"workspaces": [
+		"packages/*"
+	],
 	"lint-staged": {
 		"*": "prettier -w --ignore-unknown"
 	},
 	"scripts": {
 		"changeset": "changeset",
 		"version-packages": "changeset version",
-		"release": "pnpm build && changeset publish",
+		"release": "yarn build && changeset publish",
 		"commitlint": "commitlint --edit",
 		"prepare": "husky",
 		"build": "lerna run build",

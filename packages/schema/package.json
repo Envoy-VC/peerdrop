@@ -27,9 +27,14 @@
   },
   "dependencies": {
     "@dao-xyz/borsh": "^5.2.3",
+    "@peerbit/crypto": "^2.3.2",
     "@peerbit/document": "^7.1.16",
     "@peerbit/program": "^5.0.8",
+    "@peerbit/shared-log": "^9.2.13",
+    "@peerbit/trusted-network": "^4.1.16",
+    "p-queue": "6.4.0",
     "peerbit": "^4.0.27",
+    "uint8arrays": "^5.1.0",
     "uuid": "^11.0.3"
   },
   "devDependencies": {

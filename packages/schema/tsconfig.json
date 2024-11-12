@@ -25,6 +25,6 @@
     "**/*.cjs",
     "**/*.js",
     "prettier.config.mjs"
-  ],
+, "index.js"  ],
   "exclude": ["node_modules", "dist", "*.config.js", "*.config.mjs"]
 }
