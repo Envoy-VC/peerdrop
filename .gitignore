@@ -1,0 +1,15 @@
+node_modules/
+
+# Operating system files
+.DS_Store
+
+# Editor folders
+.idea/
+.vscode/
+
+
+# Keys
+.env
+.env.local
+.env.development
+.env.production
