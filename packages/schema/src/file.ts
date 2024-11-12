@@ -102,7 +102,7 @@ export class File extends AbstractFile {
   }
 }
 
-type Args = { replicate: ReplicationOptions };
+type Args = { replicate?: ReplicationOptions };
 
 interface CreateFilesProps {
   id: Uint8Array;
@@ -242,20 +242,23 @@ export class Files extends Program<Args> {
     await this.files.open({
       type: AbstractFile,
       replicate: args?.replicate,
-      replicas: { min: 3 },
       canPerform: async (operation) => {
-        if (!this.trustGraph) {
-          return true;
-        }
-        for (const key of await operation.entry.getPublicKeys()) {
-          if (await this.trustGraph.isTrusted(key)) {
-            return true;
-          }
-        }
-        return false;
+        return true;
+        // if (!this.trustGraph) {
+        //   return true;
+        // }
+        // for (const key of await operation.entry.getPublicKeys()) {
+        //   if (await this.trustGraph.isTrusted(key)) {
+        //     return true;
+        //   }
+        // }
+        // return false;
       },
       index: {
         type: IndexableFile,
+        idProperty: ['id'],
+        canSearch: () => true,
+        canRead: () => true,
       },
     });
   }
