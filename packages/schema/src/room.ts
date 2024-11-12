@@ -1,5 +1,4 @@
-import { field, option, variant, vec } from '@dao-xyz/borsh';
-import { Documents } from '@peerbit/document';
+import { field, variant } from '@dao-xyz/borsh';
 import { Program } from '@peerbit/program';
 import { ReplicationOptions } from '@peerbit/shared-log';
 
