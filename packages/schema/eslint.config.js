@@ -26,7 +26,7 @@ export default [
       },
     },
 
-    exclude: ['prettier.config.js'],
+    exclude: ['prettier.config.mjs'],
     rules: {
       'no-console': ['off'],
       '@typescript-eslint/explicit-function-return-type': 'off',

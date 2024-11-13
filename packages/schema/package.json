@@ -1,7 +1,6 @@
 {
   "name": "@peerdrop/schema",
   "version": "0.0.0",
-  "private": false,
   "description": "",
   "keywords": [],
   "license": "ISC",
@@ -10,12 +9,12 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
+      "import": "./dist/index.js",
       "require": "./dist/index.js"
     }
   },
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist/**"

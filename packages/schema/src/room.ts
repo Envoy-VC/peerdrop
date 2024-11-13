@@ -4,7 +4,6 @@ import { ReplicationOptions } from '@peerbit/shared-log';
 
 import { Files } from './file.js';
 
-
 type Args = { replicate?: ReplicationOptions };
 
 @variant('room')
@@ -18,7 +17,7 @@ export class Room extends Program<Args> {
   constructor(properties: { id: Uint8Array }) {
     super();
     this.id = properties.id;
-    this.files = new Files({id: properties.id, name: 'files'});
+    this.files = new Files({ id: properties.id, name: 'files' });
   }
 
   async open(args?: Args): Promise<void> {

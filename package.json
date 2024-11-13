@@ -2,11 +2,11 @@
 	"name": "peerdrop",
 	"private": true,
 	"devDependencies": {
+		"@changesets/cli": "^2.27.9",
 		"@commitlint/cli": "^19.5.0",
 		"@commitlint/config-conventional": "^19.5.0",
 		"husky": "^9.1.6",
-		"lerna": "^8.1.9",
-		"@changesets/cli": "^2.27.9"
+		"lerna": "^8.1.9"
 	},
 	"workspaces": [
 		"packages/*"
