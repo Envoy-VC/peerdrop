@@ -8,26 +8,19 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 const host = process.env.TAURI_DEV_HOST;
 
 export default defineConfig({
-  clearScreen: false,
-  envPrefix: ['VITE_', 'TAURI_ENV_*'],
+  envPrefix: ['VITE_'],
   plugins: [
     TanStackRouterVite({}),
     react(),
     peerbit(),
     nodePolyfills({ protocolImports: true }),
   ],
-  server: { strictPort: true, port: 3000 },
+  server: { port: 3000 },
   publicDir: 'public',
   resolve: {
     alias: {
       '~': path.resolve(__dirname, './src'),
       public: path.resolve(__dirname, './public'),
     },
-  },
-
-  build: {
-    target: 'chrome105',
-    minify: !process.env.TAURI_ENV_DEBUG ? 'esbuild' : false,
-    sourcemap: !!process.env.TAURI_ENV_DEBUG,
   },
 });
