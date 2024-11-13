@@ -1,0 +1,44 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "format": "prettier . --write --cache",
+    "serve": "vite preview",
+    "start": "vite",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@libp2p/interface": "^2.2.0",
+    "@peerbit/document": "^7.1.16",
+    "@peerbit/react": "^0.0.10",
+    "@peerbit/vite": "^1.0.4",
+    "@peerdrop/schema": "0.0.0",
+    "@tanstack/react-router": "^1.78.2",
+    "@tanstack/router-devtools": "^1.78.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@envoy1084/style-guide": "^0.1.0",
+    "@eslint/js": "^9.14.0",
+    "@tanstack/router-plugin": "^1.78.2",
+    "@tauri-apps/cli": "^2.0.4",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/eslint": "^9.6.1",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/parser": "^8.11.0",
+    "@vitejs/plugin-react": "^4.3.2",
+    "eslint": "^9.14.0",
+    "eslint-plugin-react": "^7.37.2",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.8",
+    "typescript-eslint": "^8.12.2",
+    "vite": "^5.4.8",
+    "vite-plugin-node-polyfills": "^0.22.0"
+  }
+}
