@@ -11,7 +11,14 @@ const RoomPage = () => {
   const { program } = useProgram(
     new Room({
       id: Uint8Array.from(Buffer.from(roomId)),
-    })
+    }),
+    {
+      args: { replicate: 10 },
+      existing: 'reuse',
+      onOpen: () => {
+        onChange();
+      },
+    }
   );
 
   const onChange = () => {
