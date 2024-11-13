@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 const RoomPage = () => {
   const { roomId } = Route.useParams();
-  const { peer } = usePeer();
+  const { peer, persisted } = usePeer();
   const { program } = useProgram(
     new Room({
       id: Uint8Array.from(Buffer.from(roomId)),
@@ -42,6 +42,7 @@ const RoomPage = () => {
     <div className='flex flex-col gap-3'>
       <div>Room {roomId}</div>
       <div>Peer: {peer?.peerId.toString() ?? ''}</div>
+      <div>Persitsted: {String(persisted)}</div>
       <div>Program Address: {String(program?.address)}</div>
       <input
         placeholder='Upload File'
@@ -61,15 +62,7 @@ const RoomPage = () => {
           if (!file) return;
           const toUpload = new Uint8Array(await file.arrayBuffer());
           const id = sha256Base64Sync(toUpload);
-          const res = await program.files.add(
-            id,
-            file.name,
-            toUpload,
-            file.type
-          );
-          console.log('File Added: ', res);
-          const event = new CustomEvent('addFile');
-          program.files.emitEvent(event, true);
+          await program.files.add(id, file.name, toUpload, file.type);
         }}
       >
         Add File
@@ -91,6 +84,7 @@ const RoomPage = () => {
               },
             }
           );
+          console.log(results);
           setFiles(results);
         }}
       >

@@ -13,14 +13,19 @@
   },
   "dependencies": {
     "@libp2p/interface": "^2.2.0",
+    "@libp2p/peer-id": "^5.0.7",
+    "@peerbit/crypto": "^2.3.2",
     "@peerbit/document": "^7.1.16",
     "@peerbit/react": "^0.0.10",
     "@peerbit/vite": "^1.0.4",
     "@peerdrop/schema": "0.0.0",
     "@tanstack/react-router": "^1.78.2",
     "@tanstack/router-devtools": "^1.78.2",
+    "@types/libsodium-wrappers": "^0.7.14",
+    "libsodium-wrappers": "^0.7.15",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "usehooks-ts": "^3.1.0"
   },
   "devDependencies": {
     "@envoy1084/style-guide": "^0.1.0",
