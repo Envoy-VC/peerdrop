@@ -3,6 +3,8 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import * as React from 'react';
 import { PeerbitProvider } from '~/providers';
 
+import '../styles/globals.css';
+
 const RootComponent = () => {
   return (
     <PeerbitProvider>
