@@ -16,6 +16,9 @@ export default defineConfig({
     nodePolyfills({ protocolImports: true }),
   ],
   server: { port: 3000 },
+  build: {
+    target: 'esnext',
+  },
   publicDir: 'public',
   resolve: {
     alias: {
