@@ -1,39 +1,18 @@
 import { usePeer } from '@peerbit/react';
-import { Room } from '@peerdrop/schema';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import * as React from 'react';
+import { FileUpload, Hero } from '~/components';
+import { LoadingScreen } from '~/screens/loading';
 
 const HomeComponent = () => {
-  const { peer, loading, status } = usePeer();
-  const navigate = useNavigate();
+  const { loading, status } = usePeer();
+
+  if (loading || status !== 'connected') return <LoadingScreen />;
 
   return (
-    <div className='p-2'>
-      <pre>{JSON.stringify({ loading, status }, null, 2)}</pre>
-      <button
-        type='button'
-        onClick={() => {
-          console.log(peer);
-        }}
-      >
-        Log Peer
-      </button>
-      <button
-        type='button'
-        onClick={async () => {
-          const roomId = crypto.randomUUID();
-          const id = Uint8Array.from(Buffer.from(roomId));
-          if (!peer) return;
-          const room = await peer.open(new Room({ id }));
-          console.log('Created room', room);
-          await navigate({
-            to: '/room/$roomId',
-            params: { roomId },
-          });
-        }}
-      >
-        Create Room
-      </button>
+    <div className=''>
+      <Hero />
+      <FileUpload />
     </div>
   );
 };
