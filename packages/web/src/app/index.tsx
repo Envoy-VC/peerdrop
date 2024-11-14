@@ -10,7 +10,7 @@ const HomeComponent = () => {
   if (loading || status !== 'connected') return <LoadingScreen />;
 
   return (
-    <div className=''>
+    <div className='pb-12'>
       <Hero />
       <FileUpload />
     </div>

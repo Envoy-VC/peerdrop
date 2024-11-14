@@ -1,130 +1,75 @@
-import { sha256Base64Sync } from '@peerbit/crypto';
 import { SearchRequest } from '@peerbit/document';
-import { usePeer, useProgram } from '@peerbit/react';
+import { useProgram } from '@peerbit/react';
 import { AbstractFile, Room } from '@peerdrop/schema';
 import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
+import { RefreshCcwIcon } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { AddFiles } from '~/components';
+import { FileList } from '~/components/file-list';
 
 const RoomPage = () => {
   const { roomId } = Route.useParams();
-  const { peer, persisted } = usePeer();
-  const { program } = useProgram(
+
+  const { program: room, loading } = useProgram(
     new Room({
       id: Uint8Array.from(Buffer.from(roomId)),
     }),
     {
-      args: { replicate: 10 },
-      existing: 'reuse',
-      onOpen: () => {
-        onChange();
-      },
+      args: { replicate: true },
+      existing: 'replace',
     }
   );
 
-  const onChange = () => {
-    if (!program) return;
-    void program.files.files.index
+  const onChange = useCallback(async () => {
+    if (!room) return;
+    await room.files.files.index
       .search(new SearchRequest({}), {
         local: true,
         remote: {
           timeout: 10 * 1000,
         },
       })
-      .then((files) => setFiles(files));
-  };
+      .then((files) => {
+        setFiles(files);
+      });
+  }, [room]);
 
-  program?.files.files.events.addEventListener('change', onChange);
+  useEffect(() => {
+    if (!loading && room) {
+      void onChange();
+    }
+  }, [loading, onChange, room]);
+
+  room?.files.files.events.addEventListener('change', () => void onChange());
 
   const [files, setFiles] = useState<AbstractFile[]>([]);
-  const [file, setFile] = useState<File>();
 
   return (
-    <div className='flex flex-col gap-3'>
-      <div>Room {roomId}</div>
-      <div>Peer: {peer?.peerId.toString() ?? ''}</div>
-      <div>Persitsted: {String(persisted)}</div>
-      <div>Program Address: {String(program?.address)}</div>
-      <input
-        placeholder='Upload File'
-        type='file'
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (!file) return;
-          setFile(file);
-        }}
-      />
-
-      <button
-        className='w-fit'
-        type='button'
-        onClick={async () => {
-          if (!program) return;
-          if (!file) return;
-          const toUpload = new Uint8Array(await file.arrayBuffer());
-          const id = sha256Base64Sync(toUpload);
-          await program.files.add(id, file.name, toUpload, file.type);
-        }}
-      >
-        Add File
-      </button>
-      <button
-        className='w-fit'
-        type='button'
-        onClick={async () => {
-          if (!program) return;
-          const results = await program.files.files.index.search(
-            new SearchRequest({
-              query: [],
-              fetch: 0xffffffff,
-            }),
-            {
-              local: true,
-              remote: {
-                timeout: 10 * 1000,
-              },
-            }
-          );
-          console.log(results);
-          setFiles(results);
-        }}
-      >
-        Search Files
-      </button>
-      <div className='flex flex-col gap-2'>
-        {files.map((file) => {
-          return (
-            <div key={file.id} className='flex flex-row items-center gap-2'>
-              {file.name}
-              <button
-                className='w-fit'
-                type='button'
-                onClick={async () => {
-                  if (!program) return;
-                  const array = await file.getFile(program.files);
-                  const name = file.name;
-                  const type = file.type;
-
-                  const blob = new Blob([array], { type });
-                  const url = URL.createObjectURL(blob);
-
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = name;
-
-                  document.body.appendChild(a);
-                  a.click();
-
-                  // Clean
-                  setTimeout(() => URL.revokeObjectURL(url), 1000);
-                  document.body.removeChild(a);
-                }}
-              >
-                Download
-              </button>
-            </div>
-          );
-        })}
+    <div className='mx-auto my-24 flex w-full max-w-screen-xl flex-col gap-3 overflow-auto px-4'>
+      <div className='flex w-full flex-row items-center justify-between gap-3 px-4'>
+        <div className='text-xl font-medium text-neutral-100 md:text-3xl'>
+          Room ID: {roomId}
+        </div>
+        <button
+          className='m-0 flex h-12 flex-row items-center gap-2 p-0 text-base text-white md:text-xl'
+          type='button'
+          onClick={onChange}
+        >
+          <RefreshCcwIcon
+            className='text-xl text-white md:text-3xl'
+            size={24}
+          />
+          Refresh
+        </button>
       </div>
+      <div className='py-12'>
+        <AddFiles room={room} />
+      </div>
+      <FileList
+        className='rounded-3xl bg-neutral-100'
+        files={files}
+        room={room}
+      />
     </div>
   );
 };

@@ -22,6 +22,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
   maxFileCount?: DropzoneProps['maxFiles'];
   multiple?: boolean;
   disabled?: boolean;
+  showPreview?: boolean;
 }
 
 export const FileUploader = (props: FileUploaderProps) => {
@@ -38,6 +39,7 @@ export const FileUploader = (props: FileUploaderProps) => {
     multiple = false,
     disabled = false,
     className,
+    showPreview = true,
     ...dropzoneProps
   } = props;
 
@@ -121,7 +123,7 @@ export const FileUploader = (props: FileUploaderProps) => {
   const isDisabled = disabled || (files?.length ?? 0) >= maxFileCount;
 
   return (
-    <div className='relative mx-auto flex max-w-5xl flex-col gap-6 overflow-hidden'>
+    <div className='relative flex w-full flex-col gap-6'>
       <Dropzone
         accept={accept}
         disabled={isDisabled}
@@ -171,7 +173,7 @@ export const FileUploader = (props: FileUploaderProps) => {
                     You can upload
                     {maxFileCount > 1
                       ? ` ${maxFileCount === Infinity ? 'multiple' : String(maxFileCount)}
-                      files (up to ${formatBytes(maxSize)} each)`
+                      files`
                       : ` a file with ${formatBytes(maxSize)}`}
                   </p>
                 </div>
@@ -180,9 +182,10 @@ export const FileUploader = (props: FileUploaderProps) => {
           </div>
         )}
       </Dropzone>
-      {files?.length ? (
-        <ScrollArea className='h-32 w-full rounded-3xl bg-neutral-100 p-3 px-3'>
-          <div className='flex max-h-48 flex-col gap-4'>
+      {showPreview && files?.length ? (
+        <ScrollArea className='w-full rounded-3xl border bg-neutral-100'>
+          <div className='flex flex-col gap-4 p-3 px-3'>
+            <div className='text-3xl font-medium text-[#3E83DD]'>Files</div>
             {files.map((file, index) => (
               <FileCard
                 // eslint-disable-next-line react/no-array-index-key -- safe
