@@ -26,7 +26,7 @@ export const FileUpload = () => {
       if (!peer) {
         throw new Error('Peer not connected');
       }
-      const room = await peer.open(new Room({ id }));
+      const room = await peer.open(new Room({ id, name: roomId }));
       toast.loading('Uploading Files', { id: toastId });
       const allPromises = files.map((file) => uploadFile(file, room, peer));
       const res = await Promise.all(allPromises);

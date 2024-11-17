@@ -1,48 +1,56 @@
-import { SearchRequest } from '@peerbit/document';
 import { useProgram } from '@peerbit/react';
-import { AbstractFile, Room } from '@peerdrop/schema';
+import { Room } from '@peerdrop/schema';
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { RefreshCcwIcon } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { AddFiles } from '~/components';
 import { FileList } from '~/components/file-list';
 
 const RoomPage = () => {
   const { roomId } = Route.useParams();
 
-  const { program: room, loading } = useProgram(
+  const { program: room } = useProgram(
     new Room({
       id: Uint8Array.from(Buffer.from(roomId)),
+      name: roomId.trim(),
     }),
     {
       args: { replicate: true },
-      existing: 'replace',
     }
   );
 
-  const onChange = useCallback(async () => {
-    if (!room) return;
-    await room.files.files.index
-      .search(new SearchRequest({}), {
-        local: true,
-        remote: {
-          timeout: 10 * 1000,
-        },
-      })
-      .then((files) => {
-        setFiles(files);
-      });
-  }, [room]);
+  const { data: files, refetch } = useQuery({
+    queryKey: ['files', roomId],
+    queryFn: async () => {
+      if (!room) return [];
+      const files = await room.list();
+      return files;
+    },
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    initialData: [],
+  });
+
+  const refetchFiles = () => {
+    console.log('Refetching files');
+    refetch().catch((err: unknown) => console.log(err));
+  };
 
   useEffect(() => {
-    if (!loading && room) {
-      void onChange();
-    }
-  }, [loading, onChange, room]);
+    room?.files.events.addEventListener('change', () => {
+      console.log('Room change');
+      refetchFiles();
+    });
+    room?.files.events.addEventListener('open', () => {
+      console.log('Room opened');
+      refetchFiles();
+    });
 
-  room?.files.files.events.addEventListener('change', () => void onChange());
-
-  const [files, setFiles] = useState<AbstractFile[]>([]);
+    return () => {
+      room?.files.events.removeEventListener('change');
+      room?.files.events.removeEventListener('open');
+    };
+  });
 
   return (
     <div className='mx-auto my-24 flex w-full max-w-screen-xl flex-col gap-3 overflow-auto px-4'>
@@ -53,7 +61,7 @@ const RoomPage = () => {
         <button
           className='m-0 flex h-12 flex-row items-center gap-2 p-0 text-base text-white md:text-xl'
           type='button'
-          onClick={onChange}
+          onClick={() => refetchFiles()}
         >
           <RefreshCcwIcon
             className='text-xl text-white md:text-3xl'

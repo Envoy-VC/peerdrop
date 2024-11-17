@@ -2,7 +2,6 @@ import { cn, formatBytes } from '~/lib/utils';
 
 import { AbstractFile, Room } from '@peerdrop/schema';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
-import { useQuery } from '@tanstack/react-query';
 import { File as FileIcon } from 'lucide-react';
 import React from 'react';
 
@@ -49,26 +48,18 @@ interface FileCardProps {
 }
 
 const FileCard = ({ file: abstractFile, room }: FileCardProps) => {
-  const { data: file } = useQuery({
-    queryKey: ['file', abstractFile.id],
-    queryFn: async () => {
-      const arr = await abstractFile.getFile(room.files);
+  const onDownload = async () => {
+    const arr = await abstractFile.getFile(room);
 
-      const name = abstractFile.name;
-      const type = abstractFile.type;
+    const name = abstractFile.name;
+    const type = abstractFile.type;
 
-      const blob = new Blob([arr], { type });
-      const file = new File([blob], name, { type });
-      if (type.startsWith('image/')) {
-        // @ts-expect-error -- preview is not a standard property
-        file.preview = URL.createObjectURL(file);
-      }
-      return file;
-    },
-  });
-
-  const onDownload = () => {
-    if (!file) return;
+    const blob = new Blob([arr], { type });
+    const file = new File([blob], name, { type });
+    if (type.startsWith('image/')) {
+      // @ts-expect-error -- preview is not a standard property
+      file.preview = URL.createObjectURL(file);
+    }
     const url = URL.createObjectURL(file);
     const a = document.createElement('a');
     a.href = url;
@@ -81,29 +72,28 @@ const FileCard = ({ file: abstractFile, room }: FileCardProps) => {
     document.body.removeChild(a);
   };
 
-  if (file)
-    return (
-      <div className='relative flex items-center gap-2.5 border-b-2 pb-2 last:border-b-0'>
-        <div className='flex flex-1 gap-2.5'>
-          {isFileWithPreview(file) ? <FilePreview file={file} /> : null}
-          <div className='flex w-full flex-col gap-2'>
-            <div className='flex flex-col gap-px'>
-              <p className='text-foreground/80 line-clamp-1 text-sm font-medium'>
-                {file.name}
-              </p>
-              <p className='text-xs text-muted-foreground'>
-                {formatBytes(file.size)}
-              </p>
-            </div>
+  return (
+    <div className='relative flex items-center gap-2.5 border-b-2 pb-2 last:border-b-0'>
+      <div className='flex flex-1 gap-2.5'>
+        {/* {isFileWithPreview(file) ? <FilePreview file={file} /> : null} */}
+        <div className='flex w-full flex-col gap-2'>
+          <div className='flex flex-col gap-px'>
+            <p className='text-foreground/80 line-clamp-1 text-sm font-medium'>
+              {abstractFile.name}
+            </p>
+            <p className='text-xs text-muted-foreground'>
+              {formatBytes(abstractFile.size)}
+            </p>
           </div>
         </div>
-        <div className='flex items-center gap-2'>
-          <Button type='button' variant='outline' onClick={onDownload}>
-            Download file
-          </Button>
-        </div>
       </div>
-    );
+      <div className='flex items-center gap-2'>
+        <Button type='button' variant='outline' onClick={onDownload}>
+          Download file
+        </Button>
+      </div>
+    </div>
+  );
 };
 
 export function isFileWithPreview(
