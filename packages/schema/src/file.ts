@@ -61,7 +61,7 @@ export class TinyFile extends AbstractFile {
   type: string;
 
   @field({ type: Uint8Array })
-  file: Uint8Array; // 2 mb limit
+  file: Uint8Array; // 512 Kb limit
 
   @field({ type: option('string') })
   parentId?: string;
@@ -167,18 +167,24 @@ export class LargeFile extends AbstractFile {
           ),
         ],
         fetch: 0xffffffff,
-      })
+      }),
+      {
+        local: true,
+        remote: {
+          replicate: true,
+          minAge: 0,
+          eager: true,
+        },
+      }
     );
+    console.log('Chunks: ', allFiles);
     return allFiles;
   }
 
   async getFile(room: Room, onProgress: ProgressCallback): Promise<Uint8Array> {
     onProgress?.(0);
 
-    console.log('LISTS CHUNKS!');
     const allChunks = await this.fetchChunks(room);
-    console.log('RECEIVED CHUNKS: ' + allChunks);
-    console.log('FETCH CHUNKS');
 
     const fetchQueue = new PQueue({ concurrency: 10 });
     let fetchError: Error | undefined = undefined;
@@ -213,10 +219,13 @@ export class LargeFile extends AbstractFile {
                 lastError = error;
               }
             }
-            throw lastError;
+            if (lastError) {
+              console.log(lastError);
+              throw lastError;
+            }
           })
           .catch(() => {
-            fetchQueue.clear(); // Dont do anything more since we failed to fetch one block
+            fetchQueue.clear(); // Don't do anything more since we failed to fetch one block
           });
       }
     }
@@ -237,7 +246,7 @@ export class LargeFile extends AbstractFile {
         return chunkValue;
       })
     );
-    console.log('FETCH DONE');
+    console.log('File Resolved: ', chunkContentResolved);
     return concat(chunkContentResolved);
   }
 }

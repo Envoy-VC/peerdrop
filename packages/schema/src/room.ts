@@ -72,8 +72,8 @@ export class Room extends Program<WithReplication<Args>> {
       {
         local: true,
         remote: {
-          throwOnMissing: true,
           replicate: true,
+          minAge: 0,
           eager: true,
         },
       }
