@@ -161,7 +161,6 @@ export const PeerProvider = (options: PeerOptions) => {
           }
         }
 
-        // We create a new directory to make tab to tab communication go smoothly
         newPeer = await Peerbit.create({
           libp2p: {
             peerId,
