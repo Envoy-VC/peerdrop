@@ -6,11 +6,12 @@ import { RefreshCcwIcon } from 'lucide-react';
 import { useEffect } from 'react';
 import { AddFiles } from '~/components';
 import { FileList } from '~/components/file-list';
+import { LoadingScreen } from '~/screens/loading';
 
 const RoomPage = () => {
   const { roomId } = Route.useParams();
 
-  const { program: room } = useProgram(
+  const { program: room, loading } = useProgram(
     new Room({
       id: Uint8Array.from(Buffer.from(roomId)),
       name: roomId.trim(),
@@ -20,10 +21,19 @@ const RoomPage = () => {
     }
   );
 
+  if (loading || !room) return <LoadingScreen />;
+
+  return <RoomContainer room={room} roomId={roomId.trim()} />;
+};
+
+interface RoomContainerProps {
+  room: Room;
+  roomId: string;
+}
+const RoomContainer = ({ room, roomId }: RoomContainerProps) => {
   const { data: files, refetch } = useQuery({
     queryKey: ['files', roomId],
     queryFn: async () => {
-      if (!room) return [];
       const files = await room.list();
       return files;
     },
@@ -37,18 +47,18 @@ const RoomPage = () => {
   };
 
   useEffect(() => {
-    room?.files.events.addEventListener('change', () => {
+    refetchFiles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only once when page load
+  }, []);
+
+  useEffect(() => {
+    room.files.events.addEventListener('change', () => {
       console.log('Room change');
-      refetchFiles();
-    });
-    room?.files.events.addEventListener('open', () => {
-      console.log('Room opened');
       refetchFiles();
     });
 
     return () => {
-      room?.files.events.removeEventListener('change');
-      room?.files.events.removeEventListener('open');
+      room.files.events.removeEventListener('change');
     };
   });
 

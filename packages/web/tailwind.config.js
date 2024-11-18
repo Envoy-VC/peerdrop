@@ -8,8 +8,13 @@ export default {
     extend: {
       animation: {
         ripple: 'ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite',
+        'caret-blink': 'caret-blink 1.25s ease-out infinite',
       },
       keyframes: {
+        'caret-blink': {
+          '0%,70%,100%': { opacity: '1' },
+          '20%,50%': { opacity: '0' },
+        },
         ripple: {
           '0%, 100%': {
             transform: 'translate(-50%, -50%) scale(1)',
