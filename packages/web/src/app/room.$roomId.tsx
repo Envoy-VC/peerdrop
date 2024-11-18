@@ -37,13 +37,14 @@ const RoomContainer = ({ room, roomId }: RoomContainerProps) => {
       const files = await room.list();
       return files;
     },
-    staleTime: 10 * 60 * 1000, // 10 minutes
     initialData: [],
   });
 
   const refetchFiles = () => {
     console.log('Refetching files');
-    refetch().catch((err: unknown) => console.log(err));
+    refetch()
+      .then((res) => console.log('New Data: ', res.data))
+      .catch((err: unknown) => console.log(err));
   };
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const RoomContainer = ({ room, roomId }: RoomContainerProps) => {
 
   useEffect(() => {
     room.files.events.addEventListener('change', () => {
-      console.log('Room change');
+      console.log('Room contents changed');
       refetchFiles();
     });
 

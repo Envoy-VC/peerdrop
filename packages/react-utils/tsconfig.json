@@ -1,0 +1,29 @@
+{
+	"include": ["src"],
+	"exclude": ["node_modules"],
+	"compilerOptions": {
+		"noEmit": false,
+		"outDir": "lib/esm",
+		"jsx": "react-jsx",
+		"target": "ES2022",
+		"module": "ES2022",
+		"lib": ["Es2022", "DOM"],
+		"moduleResolution": "node",
+		"strict": true,
+		"strictPropertyInitialization": false,
+		"noUnusedLocals": false,
+		"strictFunctionTypes": true,
+		"esModuleInterop": true,
+		"noEmitOnError": false,
+		"noImplicitAny": false,
+		"declaration": true,
+		"sourceMap": true,
+		"stripInternal": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"skipLibCheck": true
+	}
+}

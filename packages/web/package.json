@@ -14,7 +14,7 @@
   "dependencies": {
     "@peerbit/crypto": "^2.3.2",
     "@peerbit/document": "^7.1.16",
-    "@peerbit/react": "^0.0.10",
+    "@peerbit/react": "1.0.0",
     "@peerdrop/schema": "0.0.0",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-progress": "^1.1.0",
