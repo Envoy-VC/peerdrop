@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@envoy1084/style-guide/typescript/node20",
+  "compilerOptions": {
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "checkJs": true,
+    "lib": ["dom", "dom.iterable", "ES2022", "ES2023"],
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ESNext",
+    "jsx": "react-jsx",
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "include": [
+    "*.config.{ts,tsx}",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.cjs",
+    "**/*.js",
+    "prettier.config.mjs",
+    "eslint.config.js"
+  ],
+  "exclude": ["node_modules", "dist", "*.config.js", "*.config.mjs"]
+}
