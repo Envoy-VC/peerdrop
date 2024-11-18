@@ -1,6 +1,7 @@
 import peerbit from '@peerbit/vite';
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react';
+import crypto from 'node:crypto';
 import path from 'node:path';
 import { defineConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
@@ -13,7 +14,9 @@ export default defineConfig({
     TanStackRouterVite({}),
     react(),
     peerbit(),
-    nodePolyfills({ protocolImports: true }),
+    nodePolyfills({
+      protocolImports: true,
+    }),
   ],
   server: { port: 3000 },
   build: {

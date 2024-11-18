@@ -1,8 +1,8 @@
-import { useProgram } from '@peerbit/react';
 import { Room } from '@peerdrop/schema';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { RefreshCcwIcon } from 'lucide-react';
+import { useProgram } from 'peerbit-react';
 import { useEffect } from 'react';
 import { AddFiles } from '~/components';
 import { FileList } from '~/components/file-list';

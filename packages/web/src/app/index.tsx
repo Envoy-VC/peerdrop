@@ -1,5 +1,5 @@
-import { usePeer } from '@peerbit/react';
 import { createFileRoute } from '@tanstack/react-router';
+import { usePeer } from 'peerbit-react';
 import * as React from 'react';
 import { FileUpload, Hero } from '~/components';
 import { LoadingScreen } from '~/screens/loading';

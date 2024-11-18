@@ -1,4 +1,4 @@
-import { PeerProvider, getFreeKeypair, releaseKey } from '@peerbit/react';
+import { PeerProvider, getFreeKeypair, releaseKey } from 'peerbit-react';
 import React, { PropsWithChildren } from 'react';
 
 const { path, key } = await getFreeKeypair('root');
@@ -9,18 +9,13 @@ window.onbeforeunload = function () {
 
 export const PeerbitProvider = ({ children }: PropsWithChildren) => {
   const network = import.meta.env.MODE === 'development' ? 'local' : 'remote';
-  console.log(path, key);
   return (
     <PeerProvider
-      waitForConnnected
-      iframe={{ targetOrigin: '*', type: 'proxy' }}
-      inMemory={false}
-      keypair={key}
+      waitForConnected
       network={network}
       top={{
-        type: 'node',
         network,
-        host: true,
+        keypair: key,
       }}
     >
       <div>{children}</div>

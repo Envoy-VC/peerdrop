@@ -1,8 +1,8 @@
 import { uploadFile } from '~/lib/helpers';
 import { errorHandler } from '~/lib/utils';
 
-import { usePeer } from '@peerbit/react';
 import { Room } from '@peerdrop/schema';
+import { usePeer } from 'peerbit-react';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 
