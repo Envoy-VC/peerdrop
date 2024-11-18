@@ -24,6 +24,7 @@ import { circuitRelayTransport } from '@libp2p/circuit-relay-v2';
 
 import * as filters from '@libp2p/websockets/filters';
 import { detectIncognito } from 'detectincognitojs';
+import { webRTC } from '@libp2p/webrtc';
 
 export type ConnectionStatus =
 	| 'disconnected'
@@ -185,19 +186,18 @@ export const PeerProvider = (options: PeerOptions) => {
 										},
 									},
 									transports: [
-										// Add websocket impl so we can connect to "unsafe" ws (production only allows wss)
 										webSockets({
 											filter: filters.all,
 										}),
 										circuitRelayTransport(),
-										/*    webRTC(), */ // TMP disable because flaky behaviour with libp2p 1.8.1
+										webRTC(),
 									],
 								}
 							: {
 									transports: [
 										webSockets({ filter: filters.wss }),
 										circuitRelayTransport(),
-										/*   webRTC(), */ // TMP disable because flaky behaviour with libp2p 1.8.1
+										webRTC(),
 									],
 								}),
 
@@ -205,9 +205,6 @@ export const PeerProvider = (options: PeerOptions) => {
 							pubsub: (c) =>
 								new DirectSub(c, {
 									canRelayMessage: true,
-									/*      connectionManager: {
-                                            autoDial: false,
-                                        }, */
 								}),
 							identify: identify(),
 						},
